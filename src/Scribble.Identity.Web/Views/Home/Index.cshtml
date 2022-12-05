@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+}
+
+@if (User.Identity!.IsAuthenticated)
+{
+    var authenticationResult = await Context.AuthenticateAsync();
+    var issued = authenticationResult.Properties!.IssuedUtc!.Value.LocalDateTime;
+    var expires = authenticationResult.Properties!.ExpiresUtc!.Value.LocalDateTime;
+    <div>
+        <p>You are signed in as</p>
+        <h2>@User.Identity!.Name</h2>
+        <hr/>
+        <dl>
+            <dt>Issued</dt>
+            <dd>@issued</dd>
+            <dt>Expires</dt>
+            <dd>@expires</dd>
+        </dl>
+        <hr/>
+        <form method="post">
+            <input type="hidden" asp-for="@ViewData["ReturnUrl"]"/>
+            <button type="submit" class="btn btn-dark btn-sm mt-3" asp-controller="Account" asp-action="Logout">Sign out</button>
+        </form>
+    </div>
+}
+
+@if (!Context.User.Identity!.IsAuthenticated)
+{
+    <div>
+        <p>You are not signed in</p>
+        <p>
+            <a class="btn btn-sm btn-dark" asp-controller="Account" asp-action="Login" asp-route-returnUrl="/">Sign in</a>
+            <a class="btn btn-sm btn-dark" asp-controller="Account" asp-action="Register" asp-route-returnUrl="/">Sign up</a>
+        </p>
+    </div>
+}

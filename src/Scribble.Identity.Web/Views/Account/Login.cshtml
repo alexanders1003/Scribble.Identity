@@ -1,0 +1,35 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Sign in - Scribble Accounts";
+    Layout = "_Layout";
+}
+
+<form autocomplete="off" method="post" asp-controller="Account" asp-action="Login">
+    <div class="icon">
+        <img class="logo" src="~/img/logo.png" alt="Scribble">
+    </div>
+    <hr>
+    <h3>Use your Scibble account to sign in</h3>
+    <input type="email" placeholder="Email" asp-for="Email" required>
+    <input type="password" placeholder="Password" asp-for="Password" required>
+    <button class="bold" type="submit" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign in</button>
+    <div class="checkbox">
+        <input type="checkbox" asp-for="RememberMe">
+        <label asp-for="RememberMe">Remember Me</label>
+    </div>
+    <div class="buttons">
+        <a class="link button" href="#">Forgot Password?</a>
+        <a class="link button" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
+    </div>
+    <hr>
+    <span class="bold">Sign in with</span>
+    <div class="brands">
+        <a class="button" href="#" title="Google">
+            <i class="icon fi fi-brands-google"></i>
+        </a>
+        <a class="button" href="#" title="ВКонтакте">
+            <i class="icon fi fi-brands-vk"></i>
+        </a>
+    </div>
+</form>
