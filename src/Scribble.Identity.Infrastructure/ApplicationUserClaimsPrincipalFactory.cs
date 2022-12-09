@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
-using Scribble.Identity.Infrastructure;
 
-namespace Scribble.Identity.Web.Definitions.Data;
+namespace Scribble.Identity.Infrastructure;
 
 public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, ApplicationRole>
 {

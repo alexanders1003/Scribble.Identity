@@ -2,13 +2,8 @@
 
 namespace Scribble.Identity.Web.Models.Account;
 
-public class RegisterViewModel
+public class SignUpViewModel
 {
-    [Required]
-    [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-    [Display(Name = "UserName")]
-    public string UserName { get; set; } = null!;
-    
     [Required]
     [EmailAddress]
     [Display(Name = "Email")]

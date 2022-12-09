@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Scribble.Identity.Infrastructure;
-using Scribble.Identity.Web.Application.Managers.Base;
+using Scribble.Identity.Web.Application.Managers;
 
 namespace Scribble.Identity.Web.Controllers;
 
@@ -19,14 +19,14 @@ public class AuthorizationController : Controller
     private readonly IOpenIddictAuthorizationManager _authorizationManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IClaimsManager _claimsManager;
+    private readonly ClaimsManager<ApplicationUser> _claimsManager;
 
     public AuthorizationController(IOpenIddictScopeManager scopeManager, 
         IOpenIddictApplicationManager applicationManager, 
         IOpenIddictAuthorizationManager authorizationManager, 
         UserManager<ApplicationUser> userManager, 
         SignInManager<ApplicationUser> signInManager, 
-        IClaimsManager claimsManager)
+        ClaimsManager<ApplicationUser> claimsManager)
     {
         _scopeManager = scopeManager;
         _applicationManager = applicationManager;

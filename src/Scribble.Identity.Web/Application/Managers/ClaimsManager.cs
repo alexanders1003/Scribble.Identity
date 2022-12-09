@@ -1,18 +1,16 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Exceptions;
-using Scribble.Identity.Web.Application.Managers.Base;
 
 namespace Scribble.Identity.Web.Application.Managers;
 
-public class ClaimsManager : IClaimsManager
+public class ClaimsManager<TUser> where TUser : class
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _claimsFactory;
+    private readonly UserManager<TUser> _userManager;
+    private readonly IUserClaimsPrincipalFactory<TUser> _claimsFactory;
 
-    public ClaimsManager(UserManager<ApplicationUser> userManager, 
-        IUserClaimsPrincipalFactory<ApplicationUser> claimsFactory)
+    public ClaimsManager(UserManager<TUser> userManager, 
+        IUserClaimsPrincipalFactory<TUser> claimsFactory)
     {
         _userManager = userManager;
         _claimsFactory = claimsFactory;

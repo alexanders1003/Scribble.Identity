@@ -14,7 +14,10 @@ public class ContextsDefinition : AppDefinition
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), optionsBuilder =>
+            {
+                optionsBuilder.MigrationsAssembly("Scribble.Identity.Infrastructure");
+            });
             options.UseOpenIddict<Guid>();
         });
 

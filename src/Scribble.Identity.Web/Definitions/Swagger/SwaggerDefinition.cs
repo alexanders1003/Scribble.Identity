@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Scribble.Identity.Models.Base;
-using Scribble.Identity.Web.Application;
+using Scribble.Identity.Web.Infrastructure;
+using Scribble.Identity.Web.Infrastructure.Attributes;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Scribble.Identity.Web.Definitions.Swagger;
 
 public class SwaggerDefinition : AppDefinition
 {
-    private const string _appVersion = $"{ThisAssembly.Git.SemVer.Major}.{ThisAssembly.Git.SemVer.Minor}.{ThisAssembly.Git.SemVer.Patch}";
-    private const string _swaggerConfig = "/swagger/v1/swagger.json";
+    private const string AppVersion = $"{ThisAssembly.Git.SemVer.Major}.{ThisAssembly.Git.SemVer.Minor}.{ThisAssembly.Git.SemVer.Patch}";
+    private const string SwaggerConfig = "/swagger/v1/swagger.json";
     
     public override void ConfigureApplication(WebApplication app)
     {
@@ -24,7 +25,7 @@ public class SwaggerDefinition : AppDefinition
         app.UseSwagger();
         app.UseSwaggerUI(settings =>
         {
-            settings.SwaggerEndpoint(_swaggerConfig, $"{AppData.ServiceName} v.{_appVersion}");
+            settings.SwaggerEndpoint(SwaggerConfig, $"{AppData.ServiceName} v.{AppVersion}");
             settings.HeadContent = $"{ThisAssembly.Git.Branch.ToUpper()} {ThisAssembly.Git.Commit.ToUpper()}";
             settings.DocumentTitle = $"{AppData.ServiceName}";
             settings.DefaultModelExpandDepth(0);
@@ -49,7 +50,7 @@ public class SwaggerDefinition : AppDefinition
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = AppData.ServiceName,
-                Version = _appVersion,
+                Version = AppVersion,
             });
 
             options.ResolveConflictingActions(x => x.First());

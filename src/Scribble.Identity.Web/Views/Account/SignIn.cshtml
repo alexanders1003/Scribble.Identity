@@ -1,11 +1,11 @@
-﻿@model LoginViewModel
+﻿@model SignInViewModel
 
 @{
     ViewData["Title"] = "Sign in - Scribble Accounts";
     Layout = "_Layout";
 }
 
-<form autocomplete="off" method="post" asp-controller="Account" asp-action="Login">
+<form autocomplete="off" method="post" asp-controller="Account" asp-action="SignIn">
     <div class="icon">
         <img class="logo" src="~/img/logo.png" alt="Scribble">
     </div>
@@ -20,7 +20,7 @@
     </div>
     <div class="buttons">
         <a class="link button" href="#">Forgot Password?</a>
-        <a class="link button" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
+        <a class="link button" asp-controller="Account" asp-action="SignUp" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
     </div>
     <hr>
     <span class="bold">Sign in with</span>

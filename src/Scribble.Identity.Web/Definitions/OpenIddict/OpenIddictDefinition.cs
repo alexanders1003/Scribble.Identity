@@ -1,6 +1,5 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
 using OpenIddict.Abstractions;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 using Scribble.Identity.Web.HostedServices;
 
@@ -27,7 +26,7 @@ public class OpenIddictDefinition : AppDefinition
                 
                 options
                     .SetAuthorizationEndpointUris("/connect/authorize")
-                    .SetLogoutEndpointUris("/connect/logout")
+                    .SetLogoutEndpointUris("/connect/signout")
                     .SetTokenEndpointUris("/connect/token")
                     .SetUserinfoEndpointUris("/connect/userinfo");
                 

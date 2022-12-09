@@ -1,7 +1,7 @@
 ﻿using Calabonga.UnitOfWork;
 using MediatR;
 
-namespace Scribble.Identity.Web.Application.Behaviors;
+namespace Scribble.Identity.Web.Infrastructure.Behaviors;
 
 public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
     where TRequest : IRequest<TResponse>

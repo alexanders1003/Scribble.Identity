@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Scribble.Identity.Web.Definitions.Identity.Permissions;
 
-namespace Scribble.Identity.Web.Definitions.Identity;
+namespace Scribble.Identity.Web.Definitions.Identity.Policy;
 
 public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
 {

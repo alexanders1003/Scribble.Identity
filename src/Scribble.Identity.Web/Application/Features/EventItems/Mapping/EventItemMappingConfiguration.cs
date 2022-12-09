@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Calabonga.UnitOfWork;
 using Scribble.Identity.Models;
+using Scribble.Identity.Web.Infrastructure.Converters;
 using Scribble.Identity.Web.Models.EventItems;
 
 namespace Scribble.Identity.Web.Application.Features.EventItems.Mapping;

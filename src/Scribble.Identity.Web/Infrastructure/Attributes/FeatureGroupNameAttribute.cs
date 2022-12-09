@@ -1,4 +1,4 @@
-﻿namespace Scribble.Identity.Web.Application;
+﻿namespace Scribble.Identity.Web.Infrastructure.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class FeatureGroupNameAttribute : Attribute

@@ -1,6 +1,6 @@
 ﻿namespace Scribble.Identity.Models.Base;
 
-public static partial class AppData
+public static class AppData
 {
     public const string ServiceName = "Scribble Identity Service";
     public const string PolicyName = "CorsPolicy";

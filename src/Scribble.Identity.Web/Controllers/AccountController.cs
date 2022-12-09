@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict.Server.AspNetCore;
 using Scribble.Identity.Infrastructure;
-using Scribble.Identity.Web.Application.Managers.Base;
+using Scribble.Identity.Web.Application.Managers;
 using Scribble.Identity.Web.Definitions.OpenIddict;
+using Scribble.Identity.Web.Infrastructure.Extensions;
 using Scribble.Identity.Web.Models.Account;
 
 namespace Scribble.Identity.Web.Controllers;
@@ -17,123 +18,88 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IClaimsManager _claimsManager;
+    private readonly ClaimsManager<ApplicationUser> _claimsManager;
+    private readonly IMapper _mapper;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IClaimsManager claimsManager)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, ClaimsManager<ApplicationUser> claimsManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _mapper = mapper;
         _claimsManager = claimsManager;
     }
 
     [AllowAnonymous]
-    [HttpGet("~/connect/login")]
-    public IActionResult Login(string returnUrl)
+    [HttpGet("~/connect/signin")]
+    public IActionResult SignIn(string returnUrl)
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
 
     [AllowAnonymous, ValidateAntiForgeryToken]
-    [HttpPost("~/connect/login")]
-    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+    [HttpPost("~/connect/signin")]
+    public async Task<IActionResult> SignIn(SignInViewModel model, string returnUrl)
     {
         if (!ModelState.IsValid) return View(model);
-
-        var user = await _userManager.FindByEmailAsync(model.Email!)
-            .ConfigureAwait(false);
-
-        if (user == null)
-        {
-            ModelState.AddModelError("UserNotFound", "User not found");
-            return View(model);
-        }
-
+        
         var signInResult = await _signInManager
-            .PasswordSignInAsync(user, model.Password!, model.RememberMe, false)
+            .PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false)
             .ConfigureAwait(false);
 
         if (signInResult.Succeeded)
         {
-            var principal = await _claimsManager.GetPrincipalByIdAsync(user.Id.ToString())
+            var principal = await _claimsManager.GetPrincipalByEmailAsync(model.Email)
                 .ConfigureAwait(false);
            
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
                 .ConfigureAwait(false);
-
+            
             return Redirect(returnUrl);
         }
-
-        if (signInResult.IsNotAllowed)
-        {
-            ModelState.AddModelError("IsNotAllowed", "Sign-in is not allowed for this account.");
-            return View(model);
-        }
+        
+        ViewData["ReturnUrl"] = returnUrl;
+        ModelState.AddSignInErrors(signInResult);
 
         return View(model);
     }
 
     [AllowAnonymous]
-    [HttpGet("~/connect/register")]
-    public IActionResult Register(string returnUrl)
+    [HttpGet("~/connect/signup")]
+    public IActionResult SignUp(string returnUrl)
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
 
     [AllowAnonymous, ValidateAntiForgeryToken]
-    [HttpPost("~/connect/register")]
-    public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
+    [HttpPost("~/connect/signup")]
+    public async Task<IActionResult> SignUp(SignUpViewModel model, string returnUrl)
     {
         if (!ModelState.IsValid) return View(model);
-
-        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        var result = await _userManager.CreateAsync(user, model.Password)
+        
+        var result = await _userManager
+            .CreateAsync(_mapper.Map<ApplicationUser>(model), model.Password)
             .ConfigureAwait(false);
 
         if (result.Succeeded)
-        {
-            var signInResult = await _signInManager
-                .PasswordSignInAsync(user, model.Password, true, false)
-                .ConfigureAwait(false);
-
-            if (signInResult.Succeeded)
+            return RedirectToAction("SignIn", "Account", new
             {
-                var principal = await _claimsManager.GetPrincipalByEmailAsync(user.Email)
-                    .ConfigureAwait(false);
-                
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
-                    .ConfigureAwait(false);
+                ReturnUrl = returnUrl
+            });
 
-                return Redirect(returnUrl);
-            }
-        }
-
-        AddErrors(result);
+        ModelState.AddIdentityErrors(result.Errors);
         
         return View(model);
     }
 
     [ValidateAntiForgeryToken]
-    [HttpPost("~/connect/logout")]
-    public async Task<IActionResult> Logout(string returnUrl)
+    [HttpPost("~/connect/signout")]
+    public async Task<IActionResult> SignOut(string returnUrl)
     {
         await _signInManager.SignOutAsync()
             .ConfigureAwait(false);
 
-        return SignOut(
-            authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-            properties: new AuthenticationProperties
-            {
-                RedirectUri = returnUrl
-            });
-    }
-
-    private void AddErrors(IdentityResult result)
-    {
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
+        return this.RedirectToLocal(returnUrl);
     }
 }

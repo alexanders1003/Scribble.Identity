@@ -10,8 +10,8 @@ public class AccountMappingConfiguration : AutoMapper.Profile
 {
     public AccountMappingConfiguration()
     {
-        CreateMap<RegisterViewModel, ApplicationUser>()
-            .ForMember(x => x.UserName, o => o.MapFrom(p => p.UserName))
+        CreateMap<SignUpViewModel, ApplicationUser>()
+            .ForMember(x => x.UserName, o => o.MapFrom(p => p.Email))
             .ForMember(x => x.Email, o => o.MapFrom(p => p.Email))
             .ForMember(x => x.EmailConfirmed, o => o.MapFrom(src => false))
             .ForMember(x => x.PhoneNumberConfirmed, o => o.MapFrom(src => false))

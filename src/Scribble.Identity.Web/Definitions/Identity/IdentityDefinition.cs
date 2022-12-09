@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Scribble.Identity.Web.Definitions.Identity.Permissions;
+using Scribble.Identity.Web.Definitions.Identity.Policy;
 
 namespace Scribble.Identity.Web.Definitions.Identity;
 
@@ -17,12 +19,11 @@ public class IdentityDefinition : AppDefinition
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.LoginPath = "/connect/login";
+                options.LoginPath = "/connect/signin";
             });
         
         services.AddAuthorization();
 
-        services.AddSingleton<IdentityHelper>();
         services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
     }

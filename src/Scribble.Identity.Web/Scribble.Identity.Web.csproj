@@ -46,9 +46,4 @@
     <_ContentIncludedByDefault Remove="Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\js" />
-    <Folder Include="wwwroot\lib" />
-  </ItemGroup>
-
 </Project>

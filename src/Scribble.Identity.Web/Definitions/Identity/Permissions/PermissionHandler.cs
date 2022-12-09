@@ -2,7 +2,7 @@
 using Calabonga.Microservices.Core;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Scribble.Identity.Web.Definitions.Identity;
+namespace Scribble.Identity.Web.Definitions.Identity.Permissions;
 
 public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
