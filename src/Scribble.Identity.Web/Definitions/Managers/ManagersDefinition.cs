@@ -1,6 +1,5 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
 using Scribble.Identity.Infrastructure;
-using Scribble.Identity.Web.Application.Managers;
 
 namespace Scribble.Identity.Web.Definitions.Managers;
 

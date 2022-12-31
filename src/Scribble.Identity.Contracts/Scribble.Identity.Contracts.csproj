@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Contract package for Scribble.Identity</Description>
+        <RepositoryUrl>https://github.com/alexanders1003/Scribble.Identity</RepositoryUrl>
+    </PropertyGroup>
+
+</Project>

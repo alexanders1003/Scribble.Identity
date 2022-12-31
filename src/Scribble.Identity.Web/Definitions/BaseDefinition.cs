@@ -2,7 +2,7 @@
 
 namespace Scribble.Identity.Web.Definitions;
 
-public class DefinitionBase : AppDefinition
+public class BaseDefinition : AppDefinition
 {
     public override void ConfigureServices(IServiceCollection services, WebApplicationBuilder builder)
     {
@@ -14,7 +14,6 @@ public class DefinitionBase : AppDefinition
         services.AddRouting(options =>
         {
             options.LowercaseUrls = true;
-            options.LowercaseQueryStrings = true;
         });
         
         services.AddMvc();

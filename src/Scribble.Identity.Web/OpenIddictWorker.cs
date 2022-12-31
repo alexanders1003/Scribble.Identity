@@ -1,8 +1,7 @@
 ﻿using OpenIddict.Abstractions;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 
-namespace Scribble.Identity.Web.HostedServices;
+namespace Scribble.Identity.Web;
 
 public class OpenIddictWorker : IHostedService
 {

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using Scribble.Identity.Infrastructure;
-using Scribble.Identity.Web.Application.Managers;
 
 namespace Scribble.Identity.Web.Controllers;
 

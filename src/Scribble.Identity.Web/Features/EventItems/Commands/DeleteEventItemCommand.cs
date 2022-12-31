@@ -2,7 +2,6 @@
 using Calabonga.Microservices.Core.Exceptions;
 using Calabonga.UnitOfWork;
 using MediatR;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 using Scribble.Identity.Infrastructure.Exceptions;
 using Scribble.Identity.Models;

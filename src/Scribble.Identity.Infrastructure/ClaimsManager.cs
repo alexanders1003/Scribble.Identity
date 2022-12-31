@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Scribble.Identity.Infrastructure.Exceptions;
 
-namespace Scribble.Identity.Web.Application.Managers;
+namespace Scribble.Identity.Infrastructure;
 
 public class ClaimsManager<TUser> where TUser : class
 {

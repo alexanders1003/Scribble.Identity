@@ -1,7 +1,6 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
 using OpenIddict.Abstractions;
 using Scribble.Identity.Infrastructure.Contexts;
-using Scribble.Identity.Web.HostedServices;
 
 namespace Scribble.Identity.Web.Definitions.OpenIddict;
 
