@@ -8,7 +8,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer("Server=localhost;Database=Scribble.Identity;User Id=sa;Password=du85txss10;TrustServerCertificate=True;Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer("Server=localhost;Database=Scribble.Identity;User Id=sa;Password=du85txss10;TrustServerCertificate=True;Trusted_Connection=True;MultipleActiveResultSets=True;");
         return new ApplicationDbContext(optionsBuilder.Options);
     }
 }

@@ -35,9 +35,9 @@ public class AuthorizationController : Controller
         _claimsManager = claimsManager;
     }
     
+    [IgnoreAntiforgeryToken]
     [HttpGet("~/connect/authorize")]
     [HttpPost("~/connect/authorize")]
-    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> Authorize()
     {
         var request = HttpContext.Request;
@@ -148,7 +148,7 @@ public class AuthorizationController : Controller
         }
     }
     
-    [HttpPost("~/connect/token"), ExcludeFromDescription]
+    [HttpPost("~/connect/token")]
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest() 

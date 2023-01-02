@@ -19,7 +19,7 @@
         <label asp-for="RememberMe">Remember Me</label>
     </div>
     <div class="buttons">
-        <a class="link button" href="#">Forgot Password?</a>
+        <a class="link button" asp-controller="Account" asp-action="ForgotPassword" asp-route-returnUrl="@ViewData["ReturnUrl"]">Forgot Password?</a>
         <a class="link button" asp-controller="Account" asp-action="SignUp" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
     </div>
     <hr>

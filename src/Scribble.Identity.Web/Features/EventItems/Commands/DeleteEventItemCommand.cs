@@ -7,7 +7,7 @@ using Scribble.Identity.Infrastructure.Exceptions;
 using Scribble.Identity.Models;
 using Scribble.Identity.Web.Models.EventItems;
 
-namespace Scribble.Identity.Web.Application.Features.EventItems.Commands;
+namespace Scribble.Identity.Web.Features.EventItems.Commands;
 
 public class DeleteEventItemCommand : IRequest<EventItemViewModel>
 {

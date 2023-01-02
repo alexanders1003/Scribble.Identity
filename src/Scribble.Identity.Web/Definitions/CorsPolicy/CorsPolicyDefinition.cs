@@ -1,15 +1,15 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
 using Scribble.Identity.Models.Base;
 
-namespace Scribble.Identity.Web.Definitions.Cors;
+namespace Scribble.Identity.Web.Definitions.CorsPolicy;
 
-public class CorsDefinition : AppDefinition
+public class CorsPolicyDefinition : AppDefinition
 {
     public override void ConfigureServices(IServiceCollection services, WebApplicationBuilder builder)
     {
         var origins = builder.Configuration
-            .GetSection("Cors")?
-            .GetSection("Origins")?
+            .GetSection("Cors")
+            .GetSection("Origins")
             .Value?.Split(",");
 
         services.AddCors(options =>
@@ -37,5 +37,10 @@ public class CorsDefinition : AppDefinition
                 }
             });
         });
+    }
+
+    public override void ConfigureApplication(WebApplication app)
+    {
+        app.UseCors();
     }
 }

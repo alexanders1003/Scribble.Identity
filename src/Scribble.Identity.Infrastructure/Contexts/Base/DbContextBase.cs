@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Scribble.Identity.Models.Base;
 
-namespace Scribble.Identity.Infrastructure.Base;
+namespace Scribble.Identity.Infrastructure.Contexts.Base;
 
 public abstract class DbContextBase : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {

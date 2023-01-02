@@ -1,8 +1,6 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Scribble.Identity.Models.Base;
-using Scribble.Identity.Web.Infrastructure;
 using Scribble.Identity.Web.Infrastructure.Attributes;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -43,7 +41,6 @@ public class SwaggerDefinition : AppDefinition
 
     public override void ConfigureServices(IServiceCollection services, WebApplicationBuilder builder)
     {
-        services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
@@ -57,23 +54,17 @@ public class SwaggerDefinition : AppDefinition
 
             options.TagActionsBy(api =>
             {
-                string tag;
-                if (api.ActionDescriptor is { } descriptor)
+                if (api.ActionDescriptor is not { } descriptor)
+                    return !string.IsNullOrEmpty(api.RelativePath)
+                        ? new List<string> { api.RelativePath }
+                        : new List<string>();
+                
+                var attribute = descriptor.EndpointMetadata.OfType<FeatureGroupNameAttribute>().FirstOrDefault();
+                    
+                return new List<string>
                 {
-                    var attribute = descriptor.EndpointMetadata.OfType<FeatureGroupNameAttribute>().FirstOrDefault();
-                    tag = attribute?.GroupName ?? descriptor.RouteValues["controller"] ?? "Untitled";
-                }
-                else
-                {
-                    tag = api.RelativePath!;
-                }
-
-                var tags = new List<string>();
-                if (!string.IsNullOrEmpty(tag))
-                {
-                    tags.Add(tag);
-                }
-                return tags;
+                    attribute?.GroupName ?? descriptor.RouteValues["controller"] ?? "Untitled"
+                };
             });
 
             var url = builder.Configuration.GetSection("AuthServer").GetValue<string>("Url");

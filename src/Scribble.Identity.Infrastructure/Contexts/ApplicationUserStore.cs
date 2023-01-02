@@ -12,7 +12,7 @@ public class ApplicationUserStore : UserStore<ApplicationUser, ApplicationRole, 
     public override async Task<ApplicationUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = new())
     {
         return await Users
-            .Include(i => i.ApplicationUserProfile).ThenInclude(i => i!.Permissions)
+            .Include(i => i.ApplicationUserProfile)
             .FirstOrDefaultAsync(user => user.Id.ToString() == userId, cancellationToken)
             .ConfigureAwait(false);
     }
@@ -20,7 +20,7 @@ public class ApplicationUserStore : UserStore<ApplicationUser, ApplicationRole, 
     public override async Task<ApplicationUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = new CancellationToken())
     {
         return await Users
-            .Include(i => i.ApplicationUserProfile).ThenInclude(i => i!.Permissions)
+            .Include(i => i.ApplicationUserProfile)
             .FirstOrDefaultAsync(user => user.NormalizedUserName == normalizedUserName, cancellationToken)
             .ConfigureAwait(false);
     }

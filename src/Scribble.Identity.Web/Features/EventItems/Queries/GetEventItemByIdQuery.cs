@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using Calabonga.UnitOfWork;
 using MediatR;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 using Scribble.Identity.Infrastructure.Exceptions;
 using Scribble.Identity.Models;
-using Scribble.Identity.Web.Controllers;
 using Scribble.Identity.Web.Models.EventItems;
 
-namespace Scribble.Identity.Web.Application.Features.EventItems.Queries;
+namespace Scribble.Identity.Web.Features.EventItems.Queries;
 
 public class GetEventItemByIdQuery : IRequest<EventItemViewModel>
 {

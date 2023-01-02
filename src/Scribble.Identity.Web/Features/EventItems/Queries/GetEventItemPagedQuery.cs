@@ -1,13 +1,11 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Calabonga.UnitOfWork;
 using MediatR;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 using Scribble.Identity.Models;
 using Scribble.Identity.Web.Models.EventItems;
 
-namespace Scribble.Identity.Web.Application.Features.EventItems.Queries;
+namespace Scribble.Identity.Web.Features.EventItems.Queries;
 
 public class GetEventItemPagedQuery : IRequest<IPagedList<EventItemViewModel>>
 {
@@ -17,8 +15,8 @@ public class GetEventItemPagedQuery : IRequest<IPagedList<EventItemViewModel>>
         PageSize = pageSize;
     }
 
-    public int PageIndex { get; init; }
-    public int PageSize { get; init; }
+    public int PageIndex { get; }
+    public int PageSize { get; }
 }
 
 public class GetEventItemPagedQueryHandler : IRequestHandler<GetEventItemPagedQuery, IPagedList<EventItemViewModel>>

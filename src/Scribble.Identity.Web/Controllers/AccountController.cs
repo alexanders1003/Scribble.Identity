@@ -133,8 +133,8 @@ public class AccountController : Controller
         return this.RedirectToLocal(returnUrl);
     }
 
-    [HttpGet("~/connect/confirm")]
     [AllowAnonymous]
+    [HttpGet("~/connect/confirm")]
     public async Task<IActionResult> ConfirmEmail(string userId, string code)
     {
         var user = await _userManager
@@ -148,5 +148,32 @@ public class AccountController : Controller
         if (result.Succeeded)
             return View("ConfirmEmail");
         return View("Error");
+    }
+
+    [AllowAnonymous]
+    [HttpGet("~/connect/challenge")]
+    public IActionResult ForgotPassword(string returnUrl)
+    {
+        ViewData["ReturnUrl"] = returnUrl;
+        return View();
+    }
+
+    public Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, string returnUrl)
+    {
+        throw new NotImplementedException();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("~/connect/reset")]
+    public IActionResult ResetPassword(string code, string returnUrl)
+    {
+        throw new NotImplementedException();
+    }
+
+    [AllowAnonymous, ValidateAntiForgeryToken]
+    [HttpPost("~/connect/reset")]
+    public Task<IActionResult> ResetPassword(ResetPasswordViewModel model, string returnUrl)
+    {
+        throw new NotImplementedException();
     }
 }

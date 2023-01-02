@@ -2,11 +2,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Scribble.Identity.Web.Application;
 using Scribble.Identity.Web.Application.Features.EventItems.Commands;
-using Scribble.Identity.Web.Application.Features.EventItems.Queries;
 using Scribble.Identity.Web.Definitions.OpenIddict;
-using Scribble.Identity.Web.Infrastructure;
+using Scribble.Identity.Web.Features.EventItems.Commands;
+using Scribble.Identity.Web.Features.EventItems.Queries;
 using Scribble.Identity.Web.Infrastructure.Attributes;
 using Scribble.Identity.Web.Models.EventItems;
 
@@ -18,11 +17,8 @@ namespace Scribble.Identity.Web.Controllers;
 public class EventItemController : ControllerBase
 {
     private readonly IMediator _mediator;
-
-    public EventItemController(IMediator mediator)
-    {
+    public EventItemController(IMediator mediator) => 
         _mediator = mediator;
-    }
 
     [HttpGet("{id:guid}")]
     [FeatureGroupName("EventItems")]

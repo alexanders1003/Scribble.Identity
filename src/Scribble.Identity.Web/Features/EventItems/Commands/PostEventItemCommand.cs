@@ -2,12 +2,11 @@
 using Calabonga.Microservices.Core.Exceptions;
 using Calabonga.UnitOfWork;
 using MediatR;
-using Scribble.Identity.Infrastructure;
 using Scribble.Identity.Infrastructure.Contexts;
 using Scribble.Identity.Models;
 using Scribble.Identity.Web.Models.EventItems;
 
-namespace Scribble.Identity.Web.Application.Features.EventItems.Commands;
+namespace Scribble.Identity.Web.Features.EventItems.Commands;
 
 public class PostEventItemCommand : IRequest<EventItemViewModel>
 {

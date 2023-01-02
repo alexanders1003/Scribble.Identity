@@ -13,17 +13,7 @@ public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<
     public override async Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
     {
         var principal = await base.CreateAsync(user);
-        
-        if (user.ApplicationUserProfile?.Permissions != null)
-        {
-            var permissions = user.ApplicationUserProfile.Permissions.ToList();
-            if (permissions.Any())
-            {
-                permissions.ForEach(x => ((ClaimsIdentity)principal.Identity!)
-                    .AddClaim(new Claim(x.PolicyName, nameof(x.PolicyName).ToLower())));
-            }
-        }
-        
+
         if (!string.IsNullOrWhiteSpace(user.UserName))
             ((ClaimsIdentity)principal.Identity!)
                 .AddClaim(new Claim(OpenIddictConstants.Claims.Username, user.UserName));

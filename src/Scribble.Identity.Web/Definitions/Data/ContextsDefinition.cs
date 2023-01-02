@@ -31,7 +31,6 @@ public class ContextsDefinition : AppDefinition
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
                 options.SignIn.RequireConfirmedEmail = true;
                 
                 options.User.RequireUniqueEmail = true;
