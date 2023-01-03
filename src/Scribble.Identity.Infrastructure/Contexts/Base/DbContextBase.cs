@@ -10,10 +10,11 @@ public abstract class DbContextBase : IdentityDbContext<ApplicationUser, Applica
 {
     private const string DefaultUserName = "Anonymous";
 
+    protected DbContextBase() { }
     protected DbContextBase(DbContextOptions options) 
         : base(options) => LastSaveChangesResult = new SaveChangesResult();
 
-    private SaveChangesResult LastSaveChangesResult { get; }
+    private SaveChangesResult? LastSaveChangesResult { get; }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
     {

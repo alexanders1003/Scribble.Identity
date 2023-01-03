@@ -30,7 +30,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Applica
         var user = await _userManager
             .FindByIdAsync(request.Id.ToString())
             .ConfigureAwait(false);
-
+        
         return _mapper.Map<ApplicationUserViewModel>(user);
     }
 }

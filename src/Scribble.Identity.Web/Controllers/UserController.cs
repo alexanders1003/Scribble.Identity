@@ -13,11 +13,11 @@ namespace Scribble.Identity.Web.Controllers;
 [ApiController]
 [Route("api/users")]
 [Authorize(AuthenticationSchemes = AuthenticationData.AuthenticationSchemes)]
-public class UsersController : ControllerBase
+public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public UsersController(IMediator mediator) => 
+    public UserController(IMediator mediator) => 
         _mediator = mediator;
 
     [HttpGet("{id:guid}")]
@@ -43,6 +43,7 @@ public class UsersController : ControllerBase
 
     [HttpPut]
     [Authorize(Permissions.Users.Edit)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task PutUser(ApplicationUserUpdateViewModel model) =>
         await _mediator.Send(new PutUserCommand(model), HttpContext.RequestAborted)
             .ConfigureAwait(false);

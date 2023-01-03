@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scribble.Identity.Web", "Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scribble.Identity.Contracts", "Scribble.Identity.Contracts\Scribble.Identity.Contracts.csproj", "{692C7557-5735-424C-8A7F-1F21FF38AEBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scribble.Identity.Tests", "Scribble.Identity.Tests\Scribble.Identity.Tests.csproj", "{CDCD47D2-3BD0-4295-9BD5-9A802FC37991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{692C7557-5735-424C-8A7F-1F21FF38AEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{692C7557-5735-424C-8A7F-1F21FF38AEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{692C7557-5735-424C-8A7F-1F21FF38AEBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDCD47D2-3BD0-4295-9BD5-9A802FC37991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDCD47D2-3BD0-4295-9BD5-9A802FC37991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDCD47D2-3BD0-4295-9BD5-9A802FC37991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDCD47D2-3BD0-4295-9BD5-9A802FC37991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

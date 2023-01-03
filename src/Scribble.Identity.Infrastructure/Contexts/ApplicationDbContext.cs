@@ -6,6 +6,7 @@ namespace Scribble.Identity.Infrastructure.Contexts;
 
 public class ApplicationDbContext : DbContextBase
 {
+    public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
         : base(options) { }
 
