@@ -4,6 +4,7 @@ using Scribble.Identity.Infrastructure.Exceptions;
 
 namespace Scribble.Identity.Infrastructure;
 
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class ClaimsManager<TUser> where TUser : class
 {
     private readonly UserManager<TUser> _userManager;
@@ -16,7 +17,7 @@ public class ClaimsManager<TUser> where TUser : class
         _claimsFactory = claimsFactory;
     }
 
-    public async Task<ClaimsPrincipal> GetPrincipalByIdAsync(string id, CancellationToken token = default)
+    public virtual async Task<ClaimsPrincipal> GetPrincipalByIdAsync(string id, CancellationToken token = default)
     {
         if (string.IsNullOrEmpty(id))
             throw new ArgumentException($"Parameter {nameof(id)} was invalid.", nameof(id));
@@ -31,7 +32,7 @@ public class ClaimsManager<TUser> where TUser : class
             .ConfigureAwait(false);
     }
 
-    public async Task<ClaimsPrincipal> GetPrincipalByEmailAsync(string email, CancellationToken token = default)
+    public virtual async Task<ClaimsPrincipal> GetPrincipalByEmailAsync(string email, CancellationToken token = default)
     {
         if (string.IsNullOrEmpty(email))
             throw new ArgumentException($"Parameter {nameof(email)} was invalid.", nameof(email));

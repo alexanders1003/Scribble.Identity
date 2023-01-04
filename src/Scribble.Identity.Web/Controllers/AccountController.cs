@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using MassTransit;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +16,17 @@ namespace Scribble.Identity.Web.Controllers;
 [Authorize(AuthenticationSchemes = AuthenticationData.AuthenticationSchemes)]
 public class AccountController : Controller
 {
+    private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly ClaimsManager<ApplicationUser> _claimsManager;
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly IMapper _mapper;
 
-    public AccountController(UserManager<ApplicationUser> userManager, 
-        SignInManager<ApplicationUser> signInManager, IMapper mapper, 
-        ClaimsManager<ApplicationUser> claimsManager, IPublishEndpoint publishEndpoint)
+    public AccountController(IMapper mapper, UserManager<ApplicationUser> userManager, 
+        SignInManager<ApplicationUser> signInManager, IPublishEndpoint publishEndpoint)
     {
+        _mapper = mapper;
         _userManager = userManager;
         _signInManager = signInManager;
-        _mapper = mapper;
-        _claimsManager = claimsManager;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -47,23 +42,19 @@ public class AccountController : Controller
     [HttpPost("~/connect/signin")]
     public async Task<IActionResult> SignIn(SignInViewModel model, string returnUrl)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
         
         var signInResult = await _signInManager
             .PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false)
             .ConfigureAwait(false);
 
         if (signInResult.Succeeded)
-        {
-            var principal = await _claimsManager.GetPrincipalByEmailAsync(model.Email)
-                .ConfigureAwait(false);
-           
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
-                .ConfigureAwait(false);
-            
             return Redirect(returnUrl);
-        }
-        
+
         ViewData["ReturnUrl"] = returnUrl;
         ModelState.AddSignInErrors(signInResult);
 
@@ -82,8 +73,12 @@ public class AccountController : Controller
     [HttpPost("~/connect/signup")]
     public async Task<IActionResult> SignUp(SignUpViewModel model, string returnUrl)
     {
-        if (!ModelState.IsValid) return View(model);
-        
+        if (!ModelState.IsValid)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(model);
+        }
+
         var result = await _userManager
             .CreateAsync(_mapper.Map<ApplicationUser>(model), model.Password)
             .ConfigureAwait(false);
