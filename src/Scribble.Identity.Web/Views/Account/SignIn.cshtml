@@ -1,35 +1,37 @@
-﻿@model SignInViewModel
+﻿@using Scribble.Identity.Web.Infrastructure.Helpers
+@model SignInViewModel
 
 @{
-    ViewData["Title"] = "Sign in - Scribble Accounts";
+    ViewData["Title"] = "Sign in";
     Layout = "_Layout";
 }
 
-<form autocomplete="off" method="post" asp-controller="Account" asp-action="SignIn">
-    <div class="icon">
-        <img class="logo" src="~/img/logo.png" alt="Scribble">
+@using(Html.BeginForm("SignIn", "Account", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post))
+{
+    @Html.Logo()
+    @Html.Title("Sign in", "User your Scribble account")
+        
+    @Html.LabelFor(m => m.Email, "Username")
+    @Html.TextBoxFor(m => m.Email, new { placeholder = "Email or Phone", type = "email"})
+        
+    @Html.LabelFor(m => m.Password, "Password")
+    @Html.TextBoxFor(m => m.Password, new { placeholder = "Password", type = "password" })
+    
+    <button type="submit">Sign in</button>
+                               
+    <div class="social">
+        <a class="button"><i class="icon fi fi-brands-google"></i>Google</a>
+        <a class="button" href="#"><i class="icon fi fi-brands-vk"></i>VK</a>
     </div>
-    <hr>
-    <h3>Use your Scibble account to sign in</h3>
-    <input type="email" placeholder="Email" asp-for="Email" required>
-    <input type="password" placeholder="Password" asp-for="Password" required>
-    <button class="bold" type="submit" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign in</button>
-    <div class="checkbox">
-        <input type="checkbox" asp-for="RememberMe">
-        <label asp-for="RememberMe">Remember Me</label>
+
+    <div class="form-links">
+        @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { returnUrl = ViewData["ReturnUrl"] }, new
+        {
+            @class = "button"
+        })
+        @Html.ActionLink("Sign Up", "SignUp", "Account", new { returnUrl = ViewData["ReturnUrl"] }, new
+        {
+            @class = "button"
+        })
     </div>
-    <div class="buttons">
-        <a class="link button" asp-controller="Account" asp-action="ForgotPassword" asp-route-returnUrl="@ViewData["ReturnUrl"]">Forgot Password?</a>
-        <a class="link button" asp-controller="Account" asp-action="SignUp" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
-    </div>
-    <hr>
-    <span class="bold">Sign in with</span>
-    <div class="brands">
-        <a class="button" href="#" title="Google">
-            <i class="icon fi fi-brands-google"></i>
-        </a>
-        <a class="button" href="#" title="ВКонтакте">
-            <i class="icon fi fi-brands-vk"></i>
-        </a>
-    </div>
-</form>
+}

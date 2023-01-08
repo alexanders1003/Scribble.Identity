@@ -23,6 +23,11 @@ public class IdentityDefinition : AppDefinition
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.LoginPath = "/connect/signin";
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = "916366519754-mfnvns2e48p16lhqg8febs70lfhv7396.apps.googleusercontent.com";
+                options.ClientSecret = "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";
             });
         
         services.AddAuthorization(options =>

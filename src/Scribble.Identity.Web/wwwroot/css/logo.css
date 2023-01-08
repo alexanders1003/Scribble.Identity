@@ -1,0 +1,32 @@
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+    margin: 0 auto;
+    width: 100px; 
+}
+
+.logo .sign {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.logo .name {
+    color: #009900;
+    font-size: 28px;
+    user-select: none;
+}
+
+.logo .square {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 7px;
+    border: 2px solid #99FF00;
+    box-shadow: -2px -2px #77EE00, inset -2px -2px #77EE00, -4px -4px #55DD00, inset -4px -4px #55DD00, -6px -6px #33CC00, inset -6px -6px #33CC00, -8px -8px #11BB00, inset -8px -8px #11BB00;
+}

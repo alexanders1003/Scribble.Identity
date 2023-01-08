@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +21,17 @@ public class AccountController : Controller
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ClaimsManager<ApplicationUser> _claimsManager;
     private readonly IPublishEndpoint _publishEndpoint;
 
     public AccountController(IMapper mapper, UserManager<ApplicationUser> userManager, 
-        SignInManager<ApplicationUser> signInManager, IPublishEndpoint publishEndpoint)
+        SignInManager<ApplicationUser> signInManager, ClaimsManager<ApplicationUser> claimsManager,
+        IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _userManager = userManager;
         _signInManager = signInManager;
+        _claimsManager = claimsManager;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -53,7 +58,15 @@ public class AccountController : Controller
             .ConfigureAwait(false);
 
         if (signInResult.Succeeded)
+        {
+            var principal = await _claimsManager.GetPrincipalByEmailAsync(model.Email)
+                .ConfigureAwait(false);
+           
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
+                .ConfigureAwait(false);
+            
             return Redirect(returnUrl);
+        }
 
         ViewData["ReturnUrl"] = returnUrl;
         ModelState.AddSignInErrors(signInResult);
@@ -61,6 +74,25 @@ public class AccountController : Controller
         return View(model);
     }
 
+    [AllowAnonymous]
+    [HttpPost("~/connect/signin-google")]
+    public IActionResult ExternalSignIn(string provider, string returnUrl)
+    {
+        var redirectUrl = Url.Action("ExternalSignInCallback", "Account",
+            new { returnUrl });
+
+        var properties = _signInManager
+            .ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+        return new ChallengeResult(provider, properties);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string remoteError = null)
+    {
+        throw new NotImplementedException();
+    }
+    
     [AllowAnonymous]
     [HttpGet("~/connect/signup")]
     public IActionResult SignUp(string returnUrl)
@@ -105,11 +137,9 @@ public class AccountController : Controller
                 Message = $"<a href=\"{callbackUrl}\">Verify</a>",
                 Format = TextFormat.Html
             });
-            
-            return RedirectToAction("SignIn", "Account", new
-            {
-                ReturnUrl = returnUrl
-            });
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("SignUpСompletion");
         }
 
         ModelState.AddIdentityErrors(result.Errors);
@@ -125,19 +155,28 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync()
             .ConfigureAwait(false);
 
-        return this.RedirectToLocal(returnUrl);
+        return RedirectToAction("SignIn", "Account", new
+        {
+            ReturnUrl = returnUrl
+        });
     }
 
     [AllowAnonymous]
     [HttpGet("~/connect/confirm")]
-    public async Task<IActionResult> ConfirmEmail(string userId, string code)
+    public async Task<IActionResult> ConfirmEmail(string? userId, string? code)
     {
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+            return View("Error");
+        
         var user = await _userManager
             .FindByIdAsync(userId)
             .ConfigureAwait(false);
+
+        if (user == null)
+            return View("Error");
         
         var result = await _userManager
-            .ConfirmEmailAsync(user!, code)
+            .ConfirmEmailAsync(user, code)
             .ConfigureAwait(false);
 
         if (result.Succeeded)
@@ -153,22 +192,83 @@ public class AccountController : Controller
         return View();
     }
 
-    public Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, string returnUrl)
+    [HttpPost("~/connect/challenge")]
+    [AllowAnonymous, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, string returnUrl)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(model);
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email)
+            .ConfigureAwait(false);
+
+        if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            return View("Error");
+
+        var code = await _userManager.GeneratePasswordResetTokenAsync(user)
+            .ConfigureAwait(false);
+        var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code, returnUrl },
+            protocol: HttpContext.Request.Scheme);
+
+        await _publishEndpoint.Publish<MailMessageRequestContract>(new()
+        {
+            Recipient = user.Email!,
+            Subject = "Reset password - Scribble Accounts",
+            Message = $"<a href=\"{callbackUrl}\">Reset</a>",
+            Format = TextFormat.Html
+        });
+
+        ViewData["ReturnUrl"] = returnUrl;
+        return View("ForgotPasswordConfirmation");
     }
 
     [AllowAnonymous]
     [HttpGet("~/connect/reset")]
-    public IActionResult ResetPassword(string code, string returnUrl)
+    public IActionResult ResetPassword(string userId, string code, string returnUrl)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+            return View("Error");
+
+        ViewData["UserId"] = userId;
+        ViewData["Code"] = code;
+        ViewData["ReturnUrl"] = returnUrl;
+        return View();
     }
 
     [AllowAnonymous, ValidateAntiForgeryToken]
     [HttpPost("~/connect/reset")]
-    public Task<IActionResult> ResetPassword(ResetPasswordViewModel model, string returnUrl)
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model, string userId, string code, string returnUrl)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(model);
+        }
+
+        var user = await _userManager.FindByIdAsync(userId)
+            .ConfigureAwait(false);
+
+        if (user == null)
+            return View("Error");
+
+        var result = await _userManager.ResetPasswordAsync(user, code, model.Password)
+            .ConfigureAwait(false);
+
+        if (result.Succeeded)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("ResetPasswordConfirmation");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+
+        ViewData["ReturnUrl"] = returnUrl;
+        return View(model);
     }
 }
