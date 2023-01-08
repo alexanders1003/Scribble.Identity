@@ -4,12 +4,15 @@
     Layout = "_Layout";
 }
 
-@using (Html.BeginForm("SignIn", "Account", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Get))
-{
+<div class="form-container">
     @Html.Logo()
     @Html.Title("Sign up", "You successfully create a Scribble account. Now you can sign in")
     <div class="image">
         <i class="fa fa-check" aria-hidden="true"></i>
     </div>
-    <button type="submit">Sign in</button>
-}
+    <section id="sign-in-form">
+        <form method="get" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+            <button class="main-button" type="submit">OK</button>
+        </form>
+    </section>
+</div>

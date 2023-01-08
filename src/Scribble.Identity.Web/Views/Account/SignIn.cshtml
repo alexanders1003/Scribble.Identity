@@ -1,82 +1,45 @@
-﻿@model SignInViewModel
+﻿@using Scribble.Identity.Web.Infrastructure.Helpers
+@model SignInViewModel
 
 @{
     ViewData["Title"] = "Sign in";
     Layout = "_Layout";
 }
 
-    <div class="form-container">
-        <section id="sign-in-form">
-            <div class="logo">
-                <div class="sign">
-                <div class="square"></div>
-                </div>
-                <span class="name">Scribble</span>
-            </div>
-            <div class="title">
-                <h3>Sign in</h3>
-                <h4>User your Scribble account</h4>
-            </div>
-            <form method="post" autocomplete="off" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">              
-                <div class="form-group">
-                    <label asp-for="Email">Username</label>
-                    <input asp-for="Email" type="text" placeholder="Email or Phone">
-                </div>
-                <div class="form-group">
-                    <label asp-for="Password">Password</label>
-                    <input asp-for="Password" type="password" placeholder="Password">
-                </div>
-                <button class="main-button" type="submit">Sign in</button>
-            </form>
-            <div class="social">
-                <section id="sign-in-form-with-google">
-                    <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-                        <button class="button" name="provider" value="Google" type="submit">
-                            <i class="icon fi fi-brands-google"></i>Google
-                        </button>
-                    </form>
-                </section>
-                <section id="sign-in-form-with-vk">
-                    <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-                        <button class="button" name="provider" value="Vkontakte" type="submit">
-                            <i class="icon fi fi-brands-vk"></i>VK
-                        </button>
-                    </form>
-                </section>
-            </div>
-            <div class="form-links">
-                <a class="button" href="#">Forgot password?</a>
-                <a class="button" href="#">Sign Up</a>
-            </div>
-        </section>
-    </div>
-
-@*@using(Html.BeginForm("SignIn", "Account", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post))
-{
+<div class="form-container">
     @Html.Logo()
     @Html.Title("Sign in", "User your Scribble account")
-        
-    @Html.LabelFor(m => m.Email, "Username")
-    @Html.TextBoxFor(m => m.Email, new { placeholder = "Email or Phone", type = "email"})
-        
-    @Html.LabelFor(m => m.Password, "Password")
-    @Html.TextBoxFor(m => m.Password, new { placeholder = "Password", type = "password" })
-    
-    <button type="submit">Sign in</button>
-                               
+    <section id="sign-in-form">
+        <form method="post" autocomplete="off" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+            <div class="form-group">
+                <label asp-for="Email">Username</label>
+                <input asp-for="Email" type="text" placeholder="Email or Phone">
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" placeholder="Password">
+            </div>
+            <button class="main-button" type="submit">Sign in</button>
+        </form>
+    </section>
     <div class="social">
-        <a class="button"><i class="icon fi fi-brands-google"></i>Google</a>
-        <a class="button" href="#"><i class="icon fi fi-brands-vk"></i>VK</a>
+        <section id="sign-in-form-with-google">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" name="provider" value="Google" type="submit">
+                    <i class="icon fi fi-brands-google"></i>Google
+                </button>
+            </form>
+        </section>
+        <section id="sign-in-form-with-vk">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" name="provider" value="Vkontakte" type="submit">
+                    <i class="icon fi fi-brands-vk"></i>VK
+                </button>
+            </form>
+        </section>
     </div>
-
     <div class="form-links">
-        @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { returnUrl = ViewData["ReturnUrl"] }, new
-        {
-            @class = "button"
-        })
-        @Html.ActionLink("Sign Up", "SignUp", "Account", new { returnUrl = ViewData["ReturnUrl"] }, new
-        {
-            @class = "button"
-        })
+        <a class="button" asp-action="ForgotPassword" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">Forgot password?</a>
+        <a class="button" asp-action="SignUp" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign Up</a>
     </div>
-}*@
+</div>

@@ -9,6 +9,11 @@ body {
     background-color: #080710;
 }
 
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
 .background {
     width: 430px;
     height: 520px;
@@ -86,14 +91,7 @@ body {
 
 .form-group {
     display: block;
-    margin-top: 20px;
-    justify-content: space-between;
-}
-
-.form-container {
-    margin-top: 15px;
-    display: block;
-    flex-direction: row;
+    margin-top: 5px;
     justify-content: space-between;
 }
 
@@ -154,9 +152,10 @@ input{
 
 .social button {
   background: red;
-  width: 175px;
+  width: 180px;
+  font-size: 100%;
   border-radius: 3px;
-  padding: 5px 10px 10px 5px;
+  padding: 5px;
   background-color: rgba(255,255,255,0.27);
   color: #eaf0fb;
   text-align: center;
@@ -171,6 +170,7 @@ input{
     box-sizing: border-box;
     text-decoration: none;
     column-gap: 10px;
+    cursor: pointer;
     -ms-user-select: none;
     -moz-user-select: none;
     user-select: none;

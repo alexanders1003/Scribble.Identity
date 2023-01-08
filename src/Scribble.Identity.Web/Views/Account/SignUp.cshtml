@@ -6,35 +6,45 @@
     Layout = "_Layout";
 }
 
-@using (Html.BeginForm("SignUp", "Account", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post))
-{
+<div class="form-container">
     @Html.Logo()
     @Html.Title("Sign up", "Create your Scribble account")
-    
-    @Html.LabelFor(m => m.Email, "Email")
-    @Html.TextBoxFor(m => m.Email, new { placeholder = "Enter your email...", type = "email" })
-    
-    <div class="form-group">
-        <div class="form-container">
-            @Html.LabelFor(m => m.Password, "Password")
-            @Html.TextBoxFor(m => m.Password, new { placeholder = "Enter password...", type = "password" })
-        </div>
-        <div class="form-container">
-            @Html.LabelFor(m => m.ConfirmPassword, "Confirm")
-            @Html.TextBoxFor(m => m.ConfirmPassword, new { placeholder = "Confirm password...", type = "password" })
-        </div>
-    </div>
-    
-    <button type="submit">Sign up</button>
-                               
+    <section id="sign-up-form">
+        <form method="post" autocomplete="off" asp-action="SignUp" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" type="text" placeholder="Enter your email...">
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" placeholder="Enter password...">
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Confirm</label>
+                    <input asp-for="ConfirmPassword" type="password" placeholder="Confirm password">
+                </div>
+            </div>
+            <button class="main-button" type="submit">Sign up</button>
+        </form>
+    </section>
     <div class="social">
-        <a class="button" href="#"><i class="icon fi fi-brands-google"></i>Google</a>
-        <a class="button" href="#"><i class="icon fi fi-brands-vk"></i>VK</a>
+        <section id="sign-up-with-googe">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" type="submit">
+                    <i class="icon fi fi-brands-google"></i>Google
+                </button>
+            </form>
+        </section>
+        <section id="sign-up-form-with-vk">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" type="submit">
+                    <i class="icon fi fi-brands-vk"></i>VK
+                </button>
+            </form>
+        </section>
     </div>
     <div class="form-links">
-        @Html.ActionLink("Sign in instead", "SignIn", "Account", new { returnUrl = ViewData["ReturnUrl"]}, new
-        {
-            @class = "button"
-        })
+        <a class="button" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign in instead</a>
     </div>
-}
+</div>

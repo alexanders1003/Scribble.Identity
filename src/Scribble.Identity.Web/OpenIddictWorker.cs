@@ -20,7 +20,7 @@ public class OpenIddictWorker : IHostedService
 
         if (await manager.FindByClientIdAsync("client-id-code", cancellationToken) is null)
         {
-            var url = _serviceProvider.GetRequiredService<IConfiguration>().GetValue<string>("AuthServer:Url");
+            var url = _serviceProvider.GetRequiredService<IConfiguration>().GetValue<string>("Authentication:ServerUrl");
 
             await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
