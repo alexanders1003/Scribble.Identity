@@ -1,6 +1,9 @@
-﻿using Calabonga.AspNetCore.AppDefinitions;
+﻿using System.Security.Claims;
+using Calabonga.AspNetCore.AppDefinitions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Scribble.Identity.Infrastructure;
@@ -28,8 +31,40 @@ public class IdentityDefinition : AppDefinition
             {
                 options.ClientId = "916366519754-mfnvns2e48p16lhqg8febs70lfhv7396.apps.googleusercontent.com";
                 options.ClientSecret = "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";
+            })
+            .AddVkontakte(options =>
+            {
+                options.ClientId = "51521437";
+                options.ClientSecret = "aH01GKJxWGQyf58GrC9b";
+
+                options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                options.TokenEndpoint = "https://oauth.vk.com/access_token";
+                
+                options.Scope.Add("email");
             });
-        
+            /*.AddOAuth("VK", "Vkontakte", options =>
+            {
+                options.ClientId = "aH01GKJxWGQyf58GrC9b";
+                options.ClientSecret = "1c59e0d61c59e0d61c59e0d6c11f4bc74b11c591c59e0d67fe2e189689b5048dc667bdc";
+                options.ClaimsIssuer = "Vkontakte";
+                options.CallbackPath = new PathString("/connect/external-signin-callback");
+                options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                options.TokenEndpoint = "https://oauth.vk.com/access_token";
+                options.Scope.Add("email");
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+                options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                options.SaveTokens = true;
+                options.Events = new OAuthEvents
+                {
+                    OnCreatingTicket = context =>
+                    {
+                        context.RunClaimActions(context.TokenResponse.Response!.RootElement);
+                        return Task.CompletedTask;
+                    },
+                    OnRemoteFailure = _ => Task.CompletedTask
+                };
+            });*/
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Permissions.Users.View, policyBuilder =>

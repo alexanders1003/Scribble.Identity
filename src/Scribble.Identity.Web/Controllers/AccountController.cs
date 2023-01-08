@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -75,7 +76,7 @@ public class AccountController : Controller
     }
 
     [AllowAnonymous]
-    [HttpPost("~/connect/signin-google")]
+    [HttpPost("~/connect/external-signin")]
     public IActionResult ExternalSignIn(string provider, string returnUrl)
     {
         var redirectUrl = Url.Action("ExternalSignInCallback", "Account",
@@ -88,9 +89,79 @@ public class AccountController : Controller
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string remoteError = null)
+    [HttpGet("~/connect/external-signin-callback")]
+    public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string? remoteError = null)
     {
-        throw new NotImplementedException();
+        returnUrl ??= Url.Content("~/");
+
+        if (remoteError != null)
+        {
+            ModelState.AddModelError("ExternalError", $"Error from external provider: {remoteError}");
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("SignIn");
+        }
+
+        var info = await _signInManager
+            .GetExternalLoginInfoAsync()
+            .ConfigureAwait(false);
+
+        if (info == null)
+        {
+            ModelState.AddModelError("ExternalError", $"Error loading external sign in information.");
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("SignIn");
+        }
+
+        var result = await _signInManager
+            .ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true)
+            .ConfigureAwait(false);
+
+        var email = info.Principal
+            .FindFirstValue(ClaimTypes.Email);
+        
+        if (result.Succeeded)
+        {
+            var principal = await _claimsManager.GetPrincipalByEmailAsync(email)
+                .ConfigureAwait(false);
+           
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
+                .ConfigureAwait(false);
+            
+            return Redirect(returnUrl);
+        }
+
+        if (email != null)
+        {
+            var user = await _userManager
+                .FindByEmailAsync(email)
+                .ConfigureAwait(false);
+
+            if (user == null)
+            {
+                user = new ApplicationUser { UserName = email, Email = email };
+               
+                await _userManager
+                    .CreateAsync(user)
+                    .ConfigureAwait(false);
+            }
+
+            await _userManager
+                .AddLoginAsync(user, info)
+                .ConfigureAwait(false);
+            await _signInManager
+                .SignInAsync(user, isPersistent: false);
+            
+            var principal = await _claimsManager.GetPrincipalByEmailAsync(email)
+                .ConfigureAwait(false);
+           
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal)
+                .ConfigureAwait(false);
+
+            return Redirect(returnUrl);
+        }
+
+        return View("Error");
     }
     
     [AllowAnonymous]
