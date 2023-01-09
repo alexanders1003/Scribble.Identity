@@ -1,9 +1,17 @@
-﻿
+﻿@using Scribble.Identity.Web.Infrastructure.Helpers
 @{
+    ViewData["Title"] = "Error";
     Layout = "_Layout";
 }
 
-<div class="text-danger">
-    <h3>Some error occurred while handling the request</h3>
-</div>
+@using (Html.BeginForm("SignIn", "Account", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Get))
+{
+    @Html.Logo()
+    @Html.Title("Error", "Some error occurred while handling the request. Please, try again later")
 
+    <div class="image">
+        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+    </div>
+
+    <button type="submit">OK</button>
+}

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Scribble.Identity.Web.Models.Account;
 
@@ -16,4 +17,6 @@ public class SignInViewModel
     
     [Display(Name = "Remember Me")]
     public bool RememberMe { get; set; }
+    
+    public IList<AuthenticationScheme> ExternalLogins { get; set; }
 }

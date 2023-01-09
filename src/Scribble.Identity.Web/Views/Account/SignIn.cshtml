@@ -1,35 +1,45 @@
-﻿@model SignInViewModel
+﻿@using Scribble.Identity.Web.Infrastructure.Helpers
+@model SignInViewModel
 
 @{
-    ViewData["Title"] = "Sign in - Scribble Accounts";
+    ViewData["Title"] = "Sign in";
     Layout = "_Layout";
 }
 
-<form autocomplete="off" method="post" asp-controller="Account" asp-action="SignIn">
-    <div class="icon">
-        <img class="logo" src="~/img/logo.png" alt="Scribble">
+<div class="form-container">
+    @Html.Logo()
+    @Html.Title("Sign in", "User your Scribble account")
+    <section id="sign-in-form">
+        <form method="post" autocomplete="off" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+            <div class="form-group">
+                <label asp-for="Email">Username</label>
+                <input asp-for="Email" type="text" placeholder="Email or Phone">
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" placeholder="Password">
+            </div>
+            <button class="main-button" type="submit">Sign in</button>
+        </form>
+    </section>
+    <div class="social">
+        <section id="sign-in-form-with-google">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" name="provider" value="Google" type="submit">
+                    <i class="icon fi fi-brands-google"></i>Google
+                </button>
+            </form>
+        </section>
+        <section id="sign-in-form-with-vk">
+            <form method="post" asp-action="ExternalSignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <button class="button" name="provider" value="Vkontakte" type="submit">
+                    <i class="icon fi fi-brands-vk"></i>VK
+                </button>
+            </form>
+        </section>
     </div>
-    <hr>
-    <h3>Use your Scibble account to sign in</h3>
-    <input type="email" placeholder="Email" asp-for="Email" required>
-    <input type="password" placeholder="Password" asp-for="Password" required>
-    <button class="bold" type="submit" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign in</button>
-    <div class="checkbox">
-        <input type="checkbox" asp-for="RememberMe">
-        <label asp-for="RememberMe">Remember Me</label>
+    <div class="form-links">
+        <a class="button" asp-action="ForgotPassword" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">Forgot password?</a>
+        <a class="button" asp-action="SignUp" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">Sign Up</a>
     </div>
-    <div class="buttons">
-        <a class="link button" asp-controller="Account" asp-action="ForgotPassword" asp-route-returnUrl="@ViewData["ReturnUrl"]">Forgot Password?</a>
-        <a class="link button" asp-controller="Account" asp-action="SignUp" asp-route-returnUrl="@ViewData["ReturnUrl"]">Create Account</a>
-    </div>
-    <hr>
-    <span class="bold">Sign in with</span>
-    <div class="brands">
-        <a class="button" href="#" title="Google">
-            <i class="icon fi fi-brands-google"></i>
-        </a>
-        <a class="button" href="#" title="ВКонтакте">
-            <i class="icon fi fi-brands-vk"></i>
-        </a>
-    </div>
-</form>
+</div>

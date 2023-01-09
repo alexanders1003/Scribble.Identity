@@ -18,7 +18,7 @@ public class SwaggerDefinition : AppDefinition
             return;
         }
 
-        var url =  app.Services.GetRequiredService<IConfiguration>().GetValue<string>("AuthServer:Url");
+        var url =  app.Services.GetRequiredService<IConfiguration>().GetValue<string>("Authentication:ServerUrl");
 
         app.UseSwagger();
         app.UseSwaggerUI(settings =>
@@ -67,7 +67,7 @@ public class SwaggerDefinition : AppDefinition
                 };
             });
 
-            var url = builder.Configuration.GetSection("AuthServer").GetValue<string>("Url");
+            var url = builder.Configuration.GetSection("Authentication").GetValue<string>("ServerUrl");
 
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {

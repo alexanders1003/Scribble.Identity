@@ -1,18 +1,20 @@
 ﻿@using Scribble.Identity.Web.Infrastructure.Helpers
 @{
-    ViewData["Title"] = "Confirmation Email";
+    ViewData["Title"] = "Sign up";
     Layout = "_Layout";
 }
 
 <div class="form-container">
     @Html.Logo()
-    @Html.Title("Sign up", "You successfully create a Scribble account. Now you can sign in")
+    @Html.Title("Sign up", "You should confirm your email")
     <div class="image">
-        <i class="fa fa-check" aria-hidden="true"></i>
+        <i class="fa fa-envelope" aria-hidden="true"></i>
     </div>
+    <h4>You've been emailed a confirmation link. Check your email</h4>
     <section id="sign-in-form">
         <form method="get" asp-action="SignIn" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-            <button class="main-button" type="submit">OK</button>
+            <button class="main-button" type="submit">Sign in</button>
         </form>
     </section>
 </div>
+

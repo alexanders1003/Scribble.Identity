@@ -23,8 +23,23 @@ public class IdentityDefinition : AppDefinition
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.LoginPath = "/connect/signin";
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+            })
+            .AddVkontakte(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Vkontakte:ClientId"] ?? string.Empty;
+                options.ClientSecret = builder.Configuration["Authentication:Vkontakte:ClientSecret"] ?? string.Empty;
+
+                options.AuthorizationEndpoint = builder.Configuration["Authentication:Vkontakte:AuthorizationEndpoint"] ?? string.Empty;
+                options.TokenEndpoint = builder.Configuration["Authentication:Vkontakte:TokenEndpoint"] ?? string.Empty;
+                
+                options.Scope.Add("email");
             });
-        
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Permissions.Users.View, policyBuilder =>

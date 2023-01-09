@@ -49,33 +49,33 @@ public static class DbInitializer
                     Name = role,
                     NormalizedName = role.ToUpper()
                 });
-            }
-
-            switch (defaultRole)
-            {
-                case DefaultRoles.Administrator:
-                    var administrator = await roleManager.FindByNameAsync(role)
-                        .ConfigureAwait(false);
+                
+                switch (defaultRole)
+                {
+                    case DefaultRoles.Administrator:
+                        var administrator = await roleManager.FindByNameAsync(role)
+                            .ConfigureAwait(false);
                     
-                    await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
-                    await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Create));
-                    await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Edit));
-                    await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Delete));
-                    break;
-                case DefaultRoles.Moderator:
-                    var moderator = await roleManager.FindByNameAsync(role)
-                        .ConfigureAwait(false);
+                        await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
+                        await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Create));
+                        await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Edit));
+                        await roleManager.AddClaimAsync(administrator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Delete));
+                        break;
+                    case DefaultRoles.Moderator:
+                        var moderator = await roleManager.FindByNameAsync(role)
+                            .ConfigureAwait(false);
                     
-                    await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
-                    await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Create));
-                    await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Edit));
-                    break;
-                case DefaultRoles.User:
-                    var user = await roleManager.FindByNameAsync(role)
-                        .ConfigureAwait(false);
+                        await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
+                        await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Create));
+                        await roleManager.AddClaimAsync(moderator!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.Edit));
+                        break;
+                    case DefaultRoles.User:
+                        var user = await roleManager.FindByNameAsync(role)
+                            .ConfigureAwait(false);
                     
-                    await roleManager.AddClaimAsync(user!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
-                    break;
+                        await roleManager.AddClaimAsync(user!, new Claim(PermissionClaimTypes.Permission, Permissions.Users.View));
+                        break;
+                }
             }
         }
     }

@@ -11,7 +11,6 @@ public class ApplicationDbContext : DbContextBase
         : base(options) { }
 
     public DbSet<EventItem> EventItems { get; set; } = null!;
-    public DbSet<ApplicationUserProfile> Profiles { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

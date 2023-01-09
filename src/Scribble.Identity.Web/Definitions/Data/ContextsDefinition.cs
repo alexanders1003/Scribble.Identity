@@ -1,6 +1,7 @@
 ﻿using Calabonga.AspNetCore.AppDefinitions;
 using Calabonga.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 using Scribble.Identity.Infrastructure;
